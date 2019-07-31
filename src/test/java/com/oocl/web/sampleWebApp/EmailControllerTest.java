@@ -29,8 +29,8 @@ public class EmailControllerTest {
     private EmailService emailService;
 
     @Test
-    public void should_return_created_as_status_code_and_expected_location_in_header() throws Exception {
-        String emailContentAsString = "{\n" +
+    public void should_return_created_as_status_code_and_expected_location_in_header_when_post_email_succeed() throws Exception {
+        String validContent = "{\n" +
                 "\"from\": \"startBox\",\n" +
                 "\"to\": \"endBox\",\n" +
                 "\"subject\": \"subject\",\n" +
@@ -41,10 +41,26 @@ public class EmailControllerTest {
         when(emailService.add(ArgumentMatchers.eq(email))).thenReturn(1);
 
         this.mockMvc.perform(post("/emails")
-                .content(emailContentAsString)
+                .content(validContent)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", containsString("/emails/1")));
+    }
+
+    @Test
+    public void should_return_bad_request_when_post_email_lacking_of_field_to() throws Exception {
+        String contentLackingTo = "{\n" +
+                "\"from\": \"startBox\",\n" +
+                "\"subject\": \"subject\",\n" +
+                "\"content\": \"content\"\n" +
+                "}";
+
+        this.mockMvc.perform(
+                post("/emails")
+                        .content(contentLackingTo)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }

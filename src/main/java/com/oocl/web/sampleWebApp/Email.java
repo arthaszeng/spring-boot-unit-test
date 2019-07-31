@@ -2,11 +2,14 @@ package com.oocl.web.sampleWebApp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.validation.constraints.NotBlank;
+
 import static java.util.Arrays.asList;
 
 @JsonIgnoreProperties(value = "id", allowGetters = true)
 public class Email {
     private String from;
+    @NotBlank
     private String to;
     private String subject;
     private String content;

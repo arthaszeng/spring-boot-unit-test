@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -18,7 +19,7 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping
-    public ResponseEntity<Void> addEmail(@RequestBody Email email) throws URISyntaxException {
+    public ResponseEntity<Void> addEmail(@Valid @RequestBody Email email) throws URISyntaxException {
         int generatedId;
         try {
             generatedId = emailService.add(email);
